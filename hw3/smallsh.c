@@ -4,6 +4,7 @@
 #include <sys/types.h>
 #include <sys/wait.h>//
 #include <string.h>
+#include <stdbool.h>
 #include "smallsh.h"
 
 
@@ -11,70 +12,62 @@
 struct cmd_var* read_commandline(char* lines){
 
 char *savepointer;
-char *temp;
-//char *token = strtok_r(lines, " ", &savepointer);
+bool temp = false;
 char *token;
 int i = 0;
 
 struct cmd_var* commandline = malloc(sizeof(struct cmd_var));
+commandline->background = false;
 
- //token = strtok_r(lines," ", &savepointer);
+//check edge case when the user wants to press enter with no input
+    if (strcmp(lines, "") == 0) {
+        commandline->argv[0] = strdup(""); //
+        //strcpy(commandline->argv[0],"");
+        return commandline;
+    }
 
-//    	    if(strcmp("<",token)){
-//        		   	    // printf("print first : %s\n", token);
-//        		token = strtok_r(NULL, " ", &savepointer);
-//        	}
-//        	else if(strcmp(">",token)){
-//        		   	     //printf(" print second :%s\n", token);
-//        		token = strtok_r(NULL, " ", &savepointer);
-//        	}
+
    for (token = strtok_r(lines, " ", &savepointer);
-       token != NULL;
-       token = strtok_r(NULL, " ", &savepointer)){
-  	     //printf("print in forloop : %s\n", token);
-	  commandline->argv[i] = malloc(strlen(token)+1 * sizeof(char));
-   	  strcpy(commandline->argv[i], token);
-   	    
-   	    if(strcmp("<",token)){
-       		   	    // printf("print first : %s\n", token);
-       		token = strtok_r(NULL, " ", &savepointer);
-       	}
-       	else if(strcmp(">",token)){
-       		   	     //printf(" print second :%s\n", token);
-       		token = strtok_r(NULL, " ", &savepointer);
-		}
-	  //token = strtok_r(NULL, " ", &savepointer);
+      token != NULL;
+      token = strtok_r(NULL, " ", &savepointer)){
 
- // > junk 
-   	   		
-   	i++;
- //   token = strtok_r(NULL, " ", &savepointer);
-   }
+      if(strcmp("&", token)==0){
+       //token = strtok_r(NULL, " ", &savepointer);
+        commandline->background = true;
+        printf("hello\n");
+      }
+
+   	  if(strcmp("<",token) == 0){ //input file
+          // take care of the redirection
+       	//	   	     printf("print first : %s\n", token);
+       	token = strtok_r(NULL, " ", &savepointer);
+        commandline->input_cmd = malloc(strlen(token)+1 * sizeof(char));
+        strcpy(commandline->input_cmd, token);
+        temp = true;
+       }
+       else if(strcmp(">",token) == 0){
+          // take care of the redirection
+       //		   	     printf(" print second :%s\n", token);
+       		token = strtok_r(NULL, " ", &savepointer);
+          commandline->output_cmd = malloc(strlen(token)+1 * sizeof(char));
+          strcpy(commandline->output_cmd, token); //output file
+          temp = true;
+		    }
+
+       // printf("test>>>>%s\n",token );
+        //delete the file commands from the argv
+        if(temp != true){
+          commandline->argv[i] = malloc(strlen(token)+1 * sizeof(char));
+          strcpy(commandline->argv[i], token);
+       	  i++;
+        }
+
+  }
 
    commandline->num_arg = i;
 
-  	   //  printf("print in forloop : %s\n", token);
-    //    while (token != NULL) {
-    //     printf("%s\n", token);
-    //     token = strtok(NULL, "< >");
-    // }
 
-  // token = strtok_r(lines, " ", &savepointer); //obtaining each line of file and storing it in a character array
-   
-
- //  inputs->argv = malloc(strlen(movie_token) + 1);
-  
-
-   //strcpy(films->title,movie_token);
-   
-   // //year  
-   // movie_token = strtok_r(NULL, ",", &savepointer); //clear token
-   // films->year = atoi(movie_token);
-
-   // //languages
-   // movie_token = strtok_r(NULL, ",", &savepointer);
-
-//return inputs;
+  return commandline;
 
 }
 

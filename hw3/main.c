@@ -1,11 +1,19 @@
+#include <sys/types.h>
+#include <unistd.h> //exec
 #include <stdio.h>
 #include <stdlib.h>
-#include <unistd.h>// for execv and fork
-#include <sys/types.h>
-#include <sys/wait.h>//
 #include <string.h>
+#include <signal.h>
+#include <fcntl.h>
+#include <math.h>
+#include <sys/stat.h>
+#include <linux/limits.h>
+#include <sys/wait.h> //wait functions
+#include <stdbool.h>
 
 #include "smallsh.h"
+
+//#define DEBUG
 
 int main( ){
 
@@ -16,87 +24,135 @@ char user_input[2048]; // taking in inputs with maximum length
 struct cmd_var *command_line = NULL;
 
     char str[] = "ls al bin < test > junk";
- 
-    // Returns first token
- //   char* token = strtok(str, " ");
- 
-    // Keep printing tokens while one of the
-    // delimiters present in str[].
-    // while (token != NULL) {
-    //   if(strcmp(">", token)){
-    //     	printf("test > : %s\n", token);
-    //     	token = strtok(NULL, " ");
-    // 	}
-    // 	else if(strcmp("<",token)){
-    // 		printf("test < : %s\n", token);
-    //     	token = strtok(NULL, " ");
-    // 	}
-    // }
 
-//char *token = strtok_r(lines, " ", &savepointer);
-// char *token;
-// int i = 0;
-//    for (token = strtok_r(str, " ", &savepointer);
-//        token != NULL;
-//        token = strtok_r(NULL, " ", &savepointer)){
-
- 
-
-//    	    if(strcmp("<",token)){
-//        //		   	     printf("print first : %s\n", token);
-//        		token = strtok_r(NULL, "<", &savepointer);
-//        	}
-//        	else if(strcmp(">",token)){
-//      //  		   	     printf(" print second :%s\n", token);
-//        		token = strtok_r(NULL, ">", &savepointer);
-
-//        	}
-//   	     printf("print after if : %s\n", token);
-
-
-//    	  // commandline->argv[i] = 
-   	
-//    	i++;
-   
-//    }
-
-
-
-do{
+while(1){
 
 printf(": ");
 fgets(user_input, sizeof(user_input), stdin);//gets in the input from the keyboard
 
 //getting rid of the next line at the end of the array
 	for(int i = 0; i < sizeof(user_input); i++){
-		if(user_input[i]== '\n'){user_input[i] == '\0';}
+		if(user_input[i]== '\n'){user_input[i] = '\0';}
 	}
-
+ 
 
 command_line = read_commandline(user_input);
 
 //printing for test
+#ifdef DEBUG
 printf("%d\n", command_line->num_arg);
 
 for(int i = 0; i < command_line->num_arg ; i++){
-	printf("ARgv:%s \n", command_line->argv[i]);
+	printf("ARgv:%s\n", command_line->argv[i]);
 }
 
-//check edge case later
-	// if(input[0] == ''){	
-	// 	test = 1;
-	// }
-	// if(test){
-	// 	input[0] = '';
-	// }
+printf("output: %s\n", command_line->output_cmd);
+printf("input: %s\n",command_line->input_cmd );
+printf("background: %d\n",command_line->background);
+printf("end of array: %s\n", command_line->argv[command_line->num_arg]);
+#endif
 
-//now to parse the command line
-//char *token = strtok_r(argv, " ", &savepointer);
+
+
+//*** BUILT IN COMMANDS
+
+if(strcmp("cd", command_line->argv[0]) == 0){
+
+    if(command_line->argv[1] == NULL){
+        chdir(getenv("HOME"));
+    }
+
+    else{
+        if( chdir(command_line->argv[1]) != 0){
+            perror("Error");
+        }
+    }
+}
+
+else if(strcmp("status",command_line->argv[0]) == 0){
+    //**
+    // write the foreground oricess with the wifexited of teh status of the child 
+    //monitor child process module
+}
+else if(strcmp("exit",command_line->argv[0]) == 0){
+    /*
+The exit command exits your shell. It takes no arguments. 
+When this command is run, 
+your shell must kill any other processes or jobs that your shell has started 
+before it terminates itself.
+
+
+    */
+exit(0); // exit success
+}
+
+else{
+    //use the execvp function
+
+
+//pid_t spawnpid = -5; 
+
+//dont fork a process if the user is entering nothing 
+if(strcmp("",command_line->argv[0])){
+   
+//** NOTE: for fork()
+/*
+fork() returns the value 0 in the child process, while the pid of the child 
+process is returned by fork() in the parent process.  
+This allows the child process and the parent process to diverge in their behavior.
+*/
+    pid_t spawnpid = fork();
+    int childstatus;
+    //if fork is successful, the value of spawnpid will be 0 - in child, and child'S PID in parent
+    fflush(stdout);
+
+
+    switch(spawnpid){
+        case -1:
+            perror("fork failed");
+            exit(1);                    //abnormal termination, minor problem in code
+            break;
+        case 0:
+        //execute the code in this branch when the child is spawned
+            printf("child (%d) is running command \n", getpid() );
+            //**NOTE: For execvp
+            //The first element of this array, i.e., argv[0], must be the same as pathname
+            //The last element of argv must be a null pointer.
+
+            printf("length: %d \n",strlen(command_line->argv[0]));
+            fflush(stdout);
+            execvp(command_line->argv[0], command_line->argv);
+            //execvp returns if only there is an error
+            fflush(stdout);
+            perror("execvp");
+            exit(2);                    //displayed for a major error in the code
+            break; 
+        default:
+        // parent process
+        //waiting for child termination
+         //printf(" test >> %d \n", spawnpid);
+            spawnpid = waitpid(spawnpid, &childstatus, 0);
+        //#ifdef DEBUG
+            printf(" PARENT (%d): CHILD (%d) terminated. exiting\n", getpid(),spawnpid);
+            fflush(stdout);
+       // #endif
+            //exit(0);
+            break;
+    }
+}
+
+}
+
+
+
 
 
 
 }
-while(1);
+
+
+
+
 
 
 
