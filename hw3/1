@@ -1,0 +1,440 @@
+PRE-SCRIPT INFO
+  Grading Script PID: 69547
+  Note: your smallsh will report a different PID when evaluating $$
+: : child (69549) is running command 
+length: 4 
+BEGINNING TEST SCRIPT
+ PARENT (69548): CHILD (69549) terminated. exiting
+: : child (69550) is running command 
+length: 4 
+
+ PARENT (69548): CHILD (69550) terminated. exiting
+: : child (69551) is running command 
+length: 4 
+--------------------
+ PARENT (69548): CHILD (69551) terminated. exiting
+: : child (69552) is running command 
+length: 4 
+Using comment (5 points if only next prompt is displayed next)
+ PARENT (69548): CHILD (69552) terminated. exiting
+: : child (69553) is running command 
+length: 5 
+execvp: No such file or directory
+ PARENT (69548): CHILD (69553) terminated. exiting
+: : child (69554) is running command 
+length: 4 
+
+ PARENT (69548): CHILD (69554) terminated. exiting
+: : child (69555) is running command 
+length: 4 
+
+ PARENT (69548): CHILD (69555) terminated. exiting
+: : child (69556) is running command 
+length: 4 
+--------------------
+ PARENT (69548): CHILD (69556) terminated. exiting
+: : child (69557) is running command 
+length: 4 
+ls (10 points for returning dir contents)
+ PARENT (69548): CHILD (69557) terminated. exiting
+: : child (69558) is running command 
+length: 2 
+1
+inputfile.txt
+main.c
+main.d
+main.o
+Makefile
+p3testscript-1
+p3testscript-improved.sh
+smallsh
+smallsh_functions.c
+smallsh_functions.d
+smallsh_functions.h
+smallsh_functions.o
+ PARENT (69548): CHILD (69558) terminated. exiting
+: : child (69559) is running command 
+length: 4 
+
+ PARENT (69548): CHILD (69559) terminated. exiting
+: : child (69560) is running command 
+length: 4 
+
+ PARENT (69548): CHILD (69560) terminated. exiting
+: : child (69561) is running command 
+length: 4 
+--------------------
+ PARENT (69548): CHILD (69561) terminated. exiting
+: : child (69562) is running command 
+length: 4 
+ls out junk
+ PARENT (69548): CHILD (69562) terminated. exiting
+: : child (69563) is running command 
+length: 2 
+1
+inputfile.txt
+main.c
+main.d
+main.o
+Makefile
+p3testscript-1
+p3testscript-improved.sh
+smallsh
+smallsh_functions.c
+smallsh_functions.d
+smallsh_functions.h
+smallsh_functions.o
+ PARENT (69548): CHILD (69563) terminated. exiting
+: : child (69564) is running command 
+length: 4 
+
+ PARENT (69548): CHILD (69564) terminated. exiting
+: : child (69565) is running command 
+length: 4 
+
+ PARENT (69548): CHILD (69565) terminated. exiting
+: : child (69566) is running command 
+length: 4 
+--------------------
+ PARENT (69548): CHILD (69566) terminated. exiting
+: : child (69567) is running command 
+length: 4 
+cat junk (15 points for correctly returning contents of junk)
+ PARENT (69548): CHILD (69567) terminated. exiting
+: : child (69568) is running command 
+length: 3 
+cat: junk: No such file or directory
+ PARENT (69548): CHILD (69568) terminated. exiting
+: : child (69569) is running command 
+length: 4 
+
+ PARENT (69548): CHILD (69569) terminated. exiting
+: : child (69570) is running command 
+length: 4 
+
+ PARENT (69548): CHILD (69570) terminated. exiting
+: : child (69571) is running command 
+length: 4 
+--------------------
+ PARENT (69548): CHILD (69571) terminated. exiting
+: : child (69572) is running command 
+length: 4 
+wc in junk (15 points for returning correct numbers from wc)
+ PARENT (69548): CHILD (69572) terminated. exiting
+: : child (69573) is running command 
+THIS IS THE INPUT 
+Unable to open "junk"
+ PARENT (69548): CHILD (69573) terminated. exiting
+: : child (69574) is running command 
+length: 4 
+
+ PARENT (69548): CHILD (69574) terminated. exiting
+: : child (69575) is running command 
+length: 4 
+
+ PARENT (69548): CHILD (69575) terminated. exiting
+: : child (69576) is running command 
+length: 4 
+--------------------
+ PARENT (69548): CHILD (69576) terminated. exiting
+: : child (69577) is running command 
+length: 4 
+wc in junk out junk2; cat junk2 (10 points for returning correct numbers from wc)
+ PARENT (69548): CHILD (69577) terminated. exiting
+: : child (69578) is running command 
+THIS IS THE INPUT 
+Unable to open "junk"
+ PARENT (69548): CHILD (69578) terminated. exiting
+: : child (69579) is running command 
+length: 3 
+cat: junk2: No such file or directory
+ PARENT (69548): CHILD (69579) terminated. exiting
+: : child (69580) is running command 
+length: 4 
+
+ PARENT (69548): CHILD (69580) terminated. exiting
+: : child (69581) is running command 
+length: 4 
+
+ PARENT (69548): CHILD (69581) terminated. exiting
+: : child (69582) is running command 
+length: 4 
+--------------------
+ PARENT (69548): CHILD (69582) terminated. exiting
+: : child (69583) is running command 
+length: 4 
+test -f badfile (10 points for returning error value of 1, note extraneous &)
+ PARENT (69548): CHILD (69583) terminated. exiting
+: : child (69584) is running command 
+length: 4 
+ PARENT (69548): CHILD (69584) terminated. exiting
+: hello
+: : hello
+: child (69585) is running command 
+length: 4 
+
+ PARENT (69548): CHILD (69585) terminated. exiting
+: : child (69586) is running command 
+length: 4 
+
+ PARENT (69548): CHILD (69586) terminated. exiting
+: : child (69587) is running command 
+length: 4 
+--------------------
+ PARENT (69548): CHILD (69587) terminated. exiting
+: : child (69588) is running command 
+length: 4 
+wc in badfile (10 points for returning text error)
+ PARENT (69548): CHILD (69588) terminated. exiting
+: : child (69589) is running command 
+THIS IS THE INPUT 
+Unable to open "badfile"
+ PARENT (69548): CHILD (69589) terminated. exiting
+: : child (69590) is running command 
+length: 4 
+
+ PARENT (69548): CHILD (69590) terminated. exiting
+: : child (69591) is running command 
+length: 4 
+
+ PARENT (69548): CHILD (69591) terminated. exiting
+: : child (69592) is running command 
+length: 4 
+--------------------
+ PARENT (69548): CHILD (69592) terminated. exiting
+: : child (69593) is running command 
+length: 4 
+badfile (10 points for returning text error)
+ PARENT (69548): CHILD (69593) terminated. exiting
+: : child (69594) is running command 
+length: 7 
+execvp: No such file or directory
+ PARENT (69548): CHILD (69594) terminated. exiting
+: : child (69595) is running command 
+length: 4 
+
+ PARENT (69548): CHILD (69595) terminated. exiting
+: : child (69596) is running command 
+length: 4 
+
+ PARENT (69548): CHILD (69596) terminated. exiting
+: : child (69597) is running command 
+length: 4 
+--------------------
+ PARENT (69548): CHILD (69597) terminated. exiting
+: : child (69598) is running command 
+length: 4 
+sleep 100 background (10 points for returning process ID of sleeper)
+ PARENT (69548): CHILD (69598) terminated. exiting
+: hello
+: hello
+child (69599) is running command 
+length: 5 
+sleep: invalid time interval ‘&’
+Try 'sleep --help' for more information.
+ PARENT (69548): CHILD (69599) terminated. exiting
+: : child (69600) is running command 
+length: 4 
+
+ PARENT (69548): CHILD (69600) terminated. exiting
+: : child (69601) is running command 
+length: 4 
+
+ PARENT (69548): CHILD (69601) terminated. exiting
+: : child (69602) is running command 
+length: 4 
+--------------------
+ PARENT (69548): CHILD (69602) terminated. exiting
+: : child (69603) is running command 
+length: 4 
+pkill -signal SIGTERM sleep (10 points for pid of killed process, 10 points for signal)
+ PARENT (69548): CHILD (69603) terminated. exiting
+: : child (69604) is running command 
+length: 4 
+(Ignore message about Operation Not Permitted)
+ PARENT (69548): CHILD (69604) terminated. exiting
+: : child (69605) is running command 
+length: 5 
+pkill: killing pid 68514 failed: Operation not permitted
+pkill: killing pid 68984 failed: Operation not permitted
+pkill: killing pid 69208 failed: Operation not permitted
+pkill: killing pid 69325 failed: Operation not permitted
+pkill: killing pid 69357 failed: Operation not permitted
+pkill: killing pid 69359 failed: Operation not permitted
+pkill: killing pid 69396 failed: Operation not permitted
+pkill: killing pid 69422 failed: Operation not permitted
+pkill: killing pid 69483 failed: Operation not permitted
+pkill: killing pid 69538 failed: Operation not permitted
+pkill: killing pid 69546 failed: Operation not permitted
+ PARENT (69548): CHILD (69605) terminated. exiting
+: : child (69609) is running command 
+length: 4 
+
+ PARENT (69548): CHILD (69609) terminated. exiting
+: : child (69610) is running command 
+length: 4 
+
+ PARENT (69548): CHILD (69610) terminated. exiting
+: : child (69611) is running command 
+length: 4 
+--------------------
+ PARENT (69548): CHILD (69611) terminated. exiting
+: : child (69612) is running command 
+length: 4 
+sleep 1 background (10 pts for pid of bg ps when done, 10 for exit value)
+ PARENT (69548): CHILD (69612) terminated. exiting
+: hello
+: hello
+child (69613) is running command 
+length: 5 
+sleep: invalid time interval ‘&’
+Try 'sleep --help' for more information.
+ PARENT (69548): CHILD (69613) terminated. exiting
+: : child (69614) is running command 
+length: 5 
+ PARENT (69548): CHILD (69614) terminated. exiting
+: : child (69624) is running command 
+length: 4 
+
+ PARENT (69548): CHILD (69624) terminated. exiting
+: : child (69625) is running command 
+length: 4 
+
+ PARENT (69548): CHILD (69625) terminated. exiting
+: : child (69626) is running command 
+length: 4 
+--------------------
+ PARENT (69548): CHILD (69626) terminated. exiting
+: : child (69627) is running command 
+length: 4 
+pwd
+ PARENT (69548): CHILD (69627) terminated. exiting
+: : child (69628) is running command 
+length: 3 
+/nfs/stak/users/tonb/CS344/hw3
+ PARENT (69548): CHILD (69628) terminated. exiting
+: : child (69629) is running command 
+length: 4 
+
+ PARENT (69548): CHILD (69629) terminated. exiting
+: : child (69630) is running command 
+length: 4 
+
+ PARENT (69548): CHILD (69630) terminated. exiting
+: : child (69631) is running command 
+length: 4 
+--------------------
+ PARENT (69548): CHILD (69631) terminated. exiting
+: : child (69632) is running command 
+length: 4 
+cd
+ PARENT (69548): CHILD (69632) terminated. exiting
+: : : : child (69633) is running command 
+length: 4 
+
+ PARENT (69548): CHILD (69633) terminated. exiting
+: : child (69634) is running command 
+length: 4 
+
+ PARENT (69548): CHILD (69634) terminated. exiting
+: child (69635) is running command 
+length: 4 
+: --------------------
+ PARENT (69548): CHILD (69635) terminated. exiting
+: : child (69636) is running command 
+length: 4 
+pwd (10 points for being in the HOME dir)
+ PARENT (69548): CHILD (69636) terminated. exiting
+: : child (69637) is running command 
+length: 3 
+/nfs/stak/users/tonb
+ PARENT (69548): CHILD (69637) terminated. exiting
+: : child (69638) is running command 
+length: 4 
+
+ PARENT (69548): CHILD (69638) terminated. exiting
+: : child (69639) is running command 
+length: 4 
+
+ PARENT (69548): CHILD (69639) terminated. exiting
+: : child (69640) is running command 
+length: 4 
+--------------------
+ PARENT (69548): CHILD (69640) terminated. exiting
+: : child (69641) is running command 
+length: 4 
+mkdir testdir$$
+ PARENT (69548): CHILD (69641) terminated. exiting
+: : child (69642) is running command 
+length: 5 
+ PARENT (69548): CHILD (69642) terminated. exiting
+: : child (69643) is running command 
+length: 4 
+
+ PARENT (69548): CHILD (69643) terminated. exiting
+: : child (69644) is running command 
+length: 4 
+
+ PARENT (69548): CHILD (69644) terminated. exiting
+: : child (69645) is running command 
+length: 4 
+--------------------
+ PARENT (69548): CHILD (69645) terminated. exiting
+: : child (69646) is running command 
+length: 4 
+cd testdir$$
+ PARENT (69548): CHILD (69646) terminated. exiting
+: : : : child (69647) is running command 
+length: 4 
+
+ PARENT (69548): CHILD (69647) terminated. exiting
+: : child (69648) is running command 
+length: 4 
+
+ PARENT (69548): CHILD (69648) terminated. exiting
+: : child (69649) is running command 
+length: 4 
+--------------------
+ PARENT (69548): CHILD (69649) terminated. exiting
+: : child (69650) is running command 
+length: 4 
+pwd (5 points for being in the newly created dir)
+ PARENT (69548): CHILD (69650) terminated. exiting
+: : child (69651) is running command 
+length: 3 
+/nfs/stak/users/tonb/testdir$$
+ PARENT (69548): CHILD (69651) terminated. exiting
+: : child (69652) is running command 
+length: 4 
+--------------------
+ PARENT (69548): CHILD (69652) terminated. exiting
+: hello
+: hello
+child (69653) is running command 
+length: 4 
+Testing foreground-only mode (20 points for entry & exit text AND ~5 seconds between times)
+ PARENT (69548): CHILD (69653) terminated. exiting
+: : child (69654) is running command 
+length: 4 
+kill: cannot find process "$$"
+ PARENT (69548): CHILD (69654) terminated. exiting
+: : child (69655) is running command 
+length: 4 
+Sun May  1 02:12:43 PDT 2022
+ PARENT (69548): CHILD (69655) terminated. exiting
+: hello
+: hello
+child (69656) is running command 
+length: 5 
+sleep: invalid time interval ‘&’
+Try 'sleep --help' for more information.
+ PARENT (69548): CHILD (69656) terminated. exiting
+: : child (69657) is running command 
+length: 4 
+Sun May  1 02:12:43 PDT 2022
+ PARENT (69548): CHILD (69657) terminated. exiting
+: : child (69658) is running command 
+length: 4 
+kill: cannot find process "$$"
+ PARENT (69548): CHILD (69658) terminated. exiting
+: 
