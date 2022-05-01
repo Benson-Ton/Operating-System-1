@@ -1,5 +1,3 @@
-//Benson Ton
-//Last Edited: 04/20/22
 #include <string.h>
 #include <stdlib.h>
 #include <unistd.h>

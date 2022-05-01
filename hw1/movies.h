@@ -24,7 +24,7 @@ void bubbleSort(char* movies_array_title[], double movies_array_rate[], int movi
 
 void movie_year_list(struct movie* node);
 void movie_rating_list(struct movie* node, int num_movies);
-void movie_language_list(struct movie* node);
+int movie_language_list(struct movie* node);
 
 
 struct movie* add_movie(char* lines);

@@ -148,7 +148,7 @@ for(int i = 0; i < num_movies; i++){
 }
 
 
-void movie_language_list(struct movie* node){
+int movie_language_list(struct movie* node){
    char  response[20];
    int   condition = -1;
    int   count = 0;
@@ -172,8 +172,12 @@ void movie_language_list(struct movie* node){
    node = node->next; //look at the next movie
    }
    //if there are no movies with the specific language then print it
-   if(count == 0){printf("\nThere are no movies released in %s \n", response);}
+   if(count == 0){
+      printf("\nThere are no movies released in %s \n", response);
+      return -1;
+    }
 
+return 0;
 }
 
 

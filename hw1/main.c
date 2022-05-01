@@ -81,7 +81,8 @@ while(condition){
          movie_rating_list(head, counter);
       }
       if(response == 3){
-         movie_language_list(head);
+         condition = movie_language_list(head);
+         
       }
       if(response == 4){
          printf("You have exited the program successfully \n");
