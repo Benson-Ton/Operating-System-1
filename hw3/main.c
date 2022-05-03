@@ -60,6 +60,7 @@ if(strcmp("cd", command_line->argv[0]) == 0){
 
     if(command_line->argv[1] == NULL){
         chdir(getenv("HOME"));
+       // chdir(getcwd("HOME"));
     }
 
     else{
@@ -75,7 +76,7 @@ else if(strcmp("status",command_line->argv[0]) == 0){
     //monitor child process module
     printf("exit status: %d\n", WIFEXITED(childstatus));
 }
-else if(strcmp("#", command_line->argv[0]) == 0){
+else if( strchr(command_line->argv[0], '#') ){
 
 }
 else if(strcmp("exit",command_line->argv[0]) == 0){
@@ -133,9 +134,20 @@ This allows the child process and the parent process to diverge in their behavio
           //  printf("child (%d) is running command \n", getpid() );
 
             if(command_line->input_cmd != NULL){
-                printf("THIS IS THE INPUT \n");
-                  fflush(stdout);
+               // printf("THIS IS THE INPUT \n");
                 input_file(command_line->input_cmd);
+                fflush(stdout);
+
+                if(command_line->output_cmd != NULL){
+                //    printf("THIS IS OUTPUT \n");
+                    output_file(command_line->output_cmd);
+                    fflush(stdout);
+                }
+            }
+            else if(command_line->output_cmd != NULL){
+               // printf("THIS IS OUTPUT \n");
+                output_file(command_line->output_cmd);
+                fflush(stdout);
             }
 
             //**NOTE: For execvp

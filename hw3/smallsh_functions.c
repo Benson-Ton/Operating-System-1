@@ -95,15 +95,13 @@ void input_file(char* input_cmd){
   }
 
 
-  printf("filedescriptor before dup2 == %d\n", filedescriptor); 
-  fflush(stdout);
+  //printf("filedescriptor before dup2 == %d\n", filedescriptor); 
+ //fflush(stdout);
   //redirect the stdin to the input file
-  int change = dup2(filedescriptor, 0);   //reading from terminal
-  if(change == -1){
+  int stdin_value = dup2(filedescriptor, 0);   //reading from the file now
+  if(stdin_value == -1){
     perror("input dup2()");
   }
-
-
 
 //can use int access(const char *pathname, int mode);
   /*    modes:
@@ -114,7 +112,36 @@ W_OK flag : Used to check for write permission bit.
 X_OK flag : Used to check for execute permission bit.
   */
 
-}
+} 
+
+void output_file(char* output_cmd){
+
+  char file_name[250];
+  strcpy(file_name, output_cmd);
+  int filedescriptor = open(file_name, O_WRONLY | O_CREAT | O_TRUNC, 0640);
+
+  if(filedescriptor == -1){
+   // printf("Unable to open \"%s\"\n", file_name);
+    perror("Unable to open");
+    printf("\"%s\"\n", file_name);
+    fflush(stdout);
+    exit(1);
+  }
+
+
+  //printf("filedescriptor before dup2 for output== %d\n", filedescriptor); 
+  //fflush(stdout);
+  //redirect the stdin to the input file
+  int stdin_value = dup2(filedescriptor, 1);   //writing to the file
+  if(stdin_value == -1){
+    perror("output dup2()");
+  }
+
+
+} 
+
+
+
 
 // char * read_commandline(void)
 // {

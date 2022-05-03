@@ -33,7 +33,7 @@ struct cmd_var{
 
 struct cmd_var* read_commandline(char* lines);
 void input_file(char* input_cmd);
-
+void output_file(char* output_cmd);
 //         if(!strcmp(in->input[0],"exit")){
 
 //         }
