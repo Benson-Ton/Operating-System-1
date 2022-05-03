@@ -14,15 +14,17 @@ struct cmd_var* read_commandline(char* lines){
 
 char *savepointer;
 bool temp = false;
+int bck_check = 0;
 char *token;
 int i = 0;
 
 struct cmd_var* commandline = malloc(sizeof(struct cmd_var));
-commandline->background = false;
+//commandline->background = false;
 
 //check edge case when the user wants to press enter with no input
     if (strcmp(lines, "") == 0) {
-        commandline->argv[0] = strdup(""); //
+        commandline->argv[0] = strdup(""); // replace it with no space as a reprompt
+        //commandline->background = false;
         //strcpy(commandline->argv[0],"");
         return commandline;
     }
@@ -33,9 +35,12 @@ commandline->background = false;
       token = strtok_r(NULL, " ", &savepointer)){
 
       if(strcmp("&", token)==0){
-       //token = strtok_r(NULL, " ", &savepointer);
-        commandline->background = true;
-        //printf("hello\n");
+       // token = strtok_r(NULL, " ", &savepointer);
+       commandline->background = true;
+       bck_check++;
+      // printf("hello\n");
+       
+       temp = true;
       }
 
    	  if(strcmp("<",token) == 0){ //input file
@@ -57,13 +62,24 @@ commandline->background = false;
 
        // printf("test>>>>%s\n",token );
         //delete the file commands from the argv
-        if(temp != true){
+        if(temp != true || bck_check == 1){
           commandline->argv[i] = malloc(strlen(token)+1 * sizeof(char));
           strcpy(commandline->argv[i], token);
        	  i++;
         }
 
   }
+  // printf("NUMBER OF ARGUEMNET: %d\n", i);
+
+   //if only one '&' then it is false
+  if( i == 1 && commandline->background ){commandline->background = false;}
+  //delete the last part of the array involving the &
+  if(commandline->background && i > 1  ){
+   // printf("helloasdsad\n");
+    commandline->argv[i-1] = NULL;
+    i = i-1;  //decrease the size of the index
+
+  }     
 
    commandline->num_arg = i;
 
@@ -156,7 +172,7 @@ int length_num = sprintf(pid_num_str, "%d", process_num); // put the process id 
   }
 
 
-
+//this free will prevent it from getting data
 //free(str);
 
 //printf("directory name is: %s\n", commandline->argv[1]);
@@ -168,9 +184,9 @@ int length_num = sprintf(pid_num_str, "%d", process_num); // put the process id 
 
 
 
-//***************NEEED TO IMPLEMENT THE $$
 
-//referenced module: Processes and I/O
+
+//REFERENCED module: Processes and I/O
 /**
 stdin: File descriptor is 0. Defaults to reading from the terminal.
 stdout: File descriptor is 1. Defaults to writing to the terminal.
@@ -182,41 +198,37 @@ void input_file(char* input_cmd){
   strcpy(file_name, input_cmd);
   int filedescriptor = open(file_name, O_RDONLY );
 
+  //if file is not opened properly
   if(filedescriptor == -1){
     printf("Unable to open \"%s\"\n", file_name);
       fflush(stdout);
     exit(1);
   }
 
-
-  //printf("filedescriptor before dup2 == %d\n", filedescriptor); 
- //fflush(stdout);
   //redirect the stdin to the input file
   int stdin_value = dup2(filedescriptor, 0);   //reading from the file now
   if(stdin_value == -1){
     perror("input dup2()");
   }
 
-//can use int access(const char *pathname, int mode);
-  /*    modes:
-
-F_OK flag : Used to check for existence of file.
-R_OK flag : Used to check for read permission bit.
-W_OK flag : Used to check for write permission bit.
-X_OK flag : Used to check for execute permission bit.
-  */
 
 } 
 
+//REFERENCED module: Processes and I/O
+/**
+stdin: File descriptor is 0. Defaults to reading from the terminal.
+stdout: File descriptor is 1. Defaults to writing to the terminal.
+stderr: File descriptor is 2. Defaults to writing to the terminal.
+*/
 void output_file(char* output_cmd){
 
   char file_name[250];
   strcpy(file_name, output_cmd);
   int filedescriptor = open(file_name, O_WRONLY | O_CREAT | O_TRUNC, 0640);
 
+  //if file is not created properly
   if(filedescriptor == -1){
-   // printf("Unable to open \"%s\"\n", file_name);
-    perror("Unable to open");
+    perror("Unable to create file");
     printf("\"%s\"\n", file_name);
     fflush(stdout);
     exit(1);
@@ -225,7 +237,7 @@ void output_file(char* output_cmd){
 
   //printf("filedescriptor before dup2 for output== %d\n", filedescriptor); 
   //fflush(stdout);
-  //redirect the stdin to the input file
+  //redirect the stdout to the output file
   int stdin_value = dup2(filedescriptor, 1);   //writing to the file
   if(stdin_value == -1){
     perror("output dup2()");
@@ -236,21 +248,3 @@ void output_file(char* output_cmd){
 
 
 
-
-// char * read_commandline(void)
-// {
-//   char *line = NULL;
-//   ssize_t bufsize = 0; // have getline allocate a buffer for us
-
-//   if (getline(&line, &bufsize, stdin) == -1){
-//     if (feof(stdin)) {
-//       exit(EXIT_SUCCESS);  // We recieved an EOF
-//     } 
-//     else  {
-//       perror("readline");
-//       exit(EXIT_FAILURE);
-//     }
-//   }
-
-//   return line;
-// }

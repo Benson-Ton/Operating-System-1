@@ -18,12 +18,10 @@
 int main( ){
 int childstatus;
 int test = 0;
-char *savepointer;
 char user_input[2048]; // taking in inputs with maximum length
 
 struct cmd_var *command_line = NULL;
 
-    char str[] = "ls al bin < test > junk";
 
 while(1){
 
@@ -33,6 +31,9 @@ fgets(user_input, sizeof(user_input), stdin);//gets in the input from the keyboa
 //getting rid of the next line at the end of the array
 	for(int i = 0; i < sizeof(user_input); i++){
 		if(user_input[i]== '\n'){user_input[i] = '\0';}
+       // if(user_input[i]== '&'){user_input[i] = '\0';}
+        //if(strchr(user_input,'&') != NULL){command_line->background = true; printf("hello\n");}
+
 	}
  
 
@@ -52,6 +53,7 @@ printf("background: %d\n",command_line->background);
 printf("end of array: %s\n", command_line->argv[command_line->num_arg]);
 #endif
 
+//printf("BACKGROUND IS: %d\n",command_line->background);
 
 
 //*** BUILT IN COMMANDS
@@ -106,11 +108,6 @@ else{
 
 
 
-    //use the execvp function
-
-
-//pid_t spawnpid = -5; 
-
 //dont fork a process if the user is enters nothing 
 if(strcmp("",command_line->argv[0])){
    
@@ -121,7 +118,7 @@ process is returned by fork() in the parent process.
 This allows the child process and the parent process to diverge in their behavior.
 */
 
-//refrenced module: Process API - Executing a New Program
+//REFERENCED module: Process API - Executing a New Program
     pid_t spawnpid = fork();
     
     //if fork is successful, the value of spawnpid will be 0 - in child, and child'S PID in parent
