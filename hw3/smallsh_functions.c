@@ -68,6 +68,100 @@ commandline->background = false;
    commandline->num_arg = i;
 
 
+
+/***************************************
+definiton variables for $$ replacement
+******************************************/
+char *str = calloc(50, sizeof(char));
+char pid_num_str[50];
+bool append = false;
+int counter = 0;
+int dollar_counter = 0;
+bool status = false;
+int append_pid = 0;
+int holder = 0;
+bool pair_count = false;
+int odd_dollar = 0;
+int process_num = getpid(); //get the current process id
+int length_num = sprintf(pid_num_str, "%d", process_num); // put the process id into a str variable 
+
+  // printf("process ID:  %d \n", process_num);
+
+   //check logic for mkdir command
+   if(strcmp(commandline->argv[0], "") != 0){
+    //printf("(string compare if statement)\n" );
+    //make sure the arguement is not empty
+     if(commandline->argv[1] != NULL){
+      //printf("NULL if statement)\n" );
+      //if the argument has $$ then move forward
+      if(strstr(commandline->argv[1], "$$") != NULL){
+        //printf("str str if statement\n");
+      
+      str = commandline->argv[1]; //allocate the arugment variable into the str variable for modification
+
+    
+        for (int j = 0; j < 50; j++){
+
+          //  printf(">>>>>>>> %c\n",str[j] );
+                //  printf("COUNTER: %d\n",counter);
+            if(str[j] == '$'){counter++; odd_dollar++;}         
+
+            //checks for how many pairs of $$ to be replaced
+            if((counter % 2 == 0 && counter != 0)){       
+              status = true;
+              append_pid++;
+      
+              counter = 0;
+             // pair_count = false;
+            }
+            
+   
+            //makes sure it is only replaced when there is a pair and start at the index before the second $
+            if(status || pair_count){
+              if(dollar_counter < length_num){
+                 //  printf(" before the replacement: %s\n",str );
+                 //  printf("INDEX IS :%d\n", j );
+               //    printf("DOLLAR COUNTER BEFORE replacement :%d\n", dollar_counter );
+                str[j-1] = pid_num_str[dollar_counter];
+              //  printf(" after the replacement: %s\n",str );
+                dollar_counter++;
+              }
+              //once it finishes the pid number then it is consider as one pair completed
+              if(dollar_counter >= length_num){
+              dollar_counter = 0;
+              status = false;
+              pair_count = true;
+              holder++;
+              }
+            }
+     //  printf("mod number: %d and limit number: %d \n", append_pid, holder);
+          
+          //once the desired pair and the completed pair matches then break the loop
+          if(holder == append_pid && append_pid != 0){break;}
+
+        }
+        //checks if there is an odd number in order to append at the end
+        if( (odd_dollar % 2) == 1 ){
+      //    printf("DOLLAR %d", odd_dollar);
+          append = true;
+        }
+
+        // append the $ if there is an odd amount
+        char money = '$';
+        if(append){strncat(str,&money,1);}
+        commandline->argv[1] = str; //add it to the argument variable for the directory to be made
+
+      }
+    }
+  }
+
+
+
+//free(str);
+
+//printf("directory name is: %s\n", commandline->argv[1]);
+
+
   return commandline;
 
 }

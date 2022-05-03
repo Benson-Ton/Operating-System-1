@@ -34,26 +34,6 @@ struct cmd_var{
 struct cmd_var* read_commandline(char* lines);
 void input_file(char* input_cmd);
 void output_file(char* output_cmd);
-//         if(!strcmp(in->input[0],"exit")){
-
-//         }
-//         else if(in->input[0][0] == '\0' || in->input[0][0] == '#'){
-  
-            
-//         }
-//         else if( !strcmp(in->input[0], "cd")){
-            
-//             //chdir(in->input[1]);
-  
-//         }
-//         else if( !strcmp(in->input[0],"status") ){
-        
-
-//         }
-//         else{
-//   			//run other commandline
-//   			//run execvp
-//         }
 
 
 

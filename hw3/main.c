@@ -58,16 +58,20 @@ printf("end of array: %s\n", command_line->argv[command_line->num_arg]);
 
 if(strcmp("cd", command_line->argv[0]) == 0){
 
+
     if(command_line->argv[1] == NULL){
         chdir(getenv("HOME"));
        // chdir(getcwd("HOME"));
     }
-
-    else{
+    else if(command_line->argv[1] != NULL){
+        chdir(getenv(command_line->argv[1]));
+        
         if( chdir(command_line->argv[1]) != 0){
             perror("Error");
         }
     }
+
+
 }
 
 else if(strcmp("status",command_line->argv[0]) == 0){
@@ -76,9 +80,9 @@ else if(strcmp("status",command_line->argv[0]) == 0){
     //monitor child process module
     printf("exit status: %d\n", WIFEXITED(childstatus));
 }
-else if( strchr(command_line->argv[0], '#') ){
 
-}
+else if( strchr(command_line->argv[0], '#') ){}
+
 else if(strcmp("exit",command_line->argv[0]) == 0){
     /*
 The exit command exits your shell. It takes no arguments. 
@@ -158,7 +162,7 @@ This allows the child process and the parent process to diverge in their behavio
             execvp(command_line->argv[0], command_line->argv);
             //execvp returns if only there is an error
            // fflush(stdout);
-            perror("execvp");
+            perror("Unknown command");
             exit(2);                    //displayed for a major error in the code
             break; 
         default:
