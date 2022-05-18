@@ -5,3 +5,17 @@
 char* replaceplus(const char* buf, const char* plus, const char* replacewith);
 
 #endif
+
+
+
+
+
+
+
+
+
+
+
+
+
+

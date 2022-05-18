@@ -21,7 +21,7 @@ char* replaceplus(const char* buf, const char* plus, const char* replacewith)
         if (strstr(&buf[i], plus) == &buf[i]) {
             count++;
   
-            // Jumping to index after the old word.
+            // Jumping to index after the old substring.
             i += replacewith_len - 1;
         }
     }
@@ -38,28 +38,9 @@ char* replaceplus(const char* buf, const char* plus, const char* replacewith)
             buf += replacewith_len;
         }
         else
-            result[i++] = *buf++;
+            result[i++] = *buf++; //resize the buffer
     }
   
     result[i] = '\0'; //end it with the null character
     return result;
 }
-
-/*
-
-
-		
-
-		getline(&text_buf,&size, stdin);
-	//	index++;
-		printf("%s\n", text_buf);
-		printf("%d\n", strlen(text_buf));
-		for (int i = 0; i < strlen(text_buf); ++i)
-		{
-			printf("test\n");
-			if(text_buf[i] < 32 || text_buf[i] > 126){return EXIT_FAILURE;}
-		}
-
-
-
-*/
