@@ -10,22 +10,33 @@
 #include <string.h>
 #include <pthread.h>
 #include <stdbool.h>
+#include <math.h>
 #include "functions.h"
 
 #define MAX_INPUT_CHAR 1024
 #define MAX_OUTPUT_CHAR 80
 
+//size of the 3 buffers
 char text_buf[MAX_INPUT_CHAR]; //input buffer
 char sep_buf[MAX_INPUT_CHAR]; //after line seperator
 char plus_sign_buf[MAX_INPUT_CHAR]; // after ++ are replaced
-char output_buf[MAX_OUTPUT_CHAR];
+//char output_buf[MAX_OUTPUT_CHAR];
 
 //boolean checkers
 bool stop_process = false;
 bool stop_input = false;
 
 //index buffer trackers
-int index_input_buf = 0;
+//int index_input_buf = 0;
+
+//intialize mutexes
+pthread_mutex_t mutex_1, mutex_2, mutex_3, mutex_4 = PTHREAD_MUTEX_INITIALIZER;
+
+
+
+
+
+
 
 //input thread functions 
 //then checks whether the ascii values are within the boundaries
@@ -100,61 +111,49 @@ return NULL;
 
 void *output_thread(void)
 {
-	bool confirm_output = false;
+	//bool confirm_output = false;
 	//bool loop = true;
-	char* output_strings = calloc(1050,sizeof(char));
-
-	int ending_char = MAX_OUTPUT_CHAR;
+	//char* output_strings = calloc(1024,sizeof(char));
+	//int ending_char = MAX_OUTPUT_CHAR;
 	int counter = 0;
-	int index = 0;
+	//int index = 0;
 
-	//char str[5];
-	//strcpy(str,"\n");
+//printf("%d \n",strlen(output_strings) );
 
-//test write 
+int temp, length;
 
-// for(int i = 0; i < strlen(plus_sign_buf);i++ ){
-// 	output_buf[i] = calloc(1050,sizeof(char));
-// }
+length = strlen(plus_sign_buf);
+temp = length/80;
+
+// temp = floor( (sizeof(plus_sign_buf)/sizeof(plus_sign_buf[0])) /80);
+// printf("TEMP IS: %d\n",temp );
+// printf("STRLEN %d\n",strlen(plus_sign_buf) );
+// int los = sizeof(plus_sign_buf)/sizeof(plus_sign_buf[0]);
+// printf("SIZE OF %d\n", los );
+
+for (int i = 0; i < temp; i++)
+{
+
+	for(int j = 0; j < 80; j++){
 
 
-	if(strcmp("STOP\n",plus_sign_buf) == 0){
-		stop_input = true;
-		printf("STOP PROCESS CONDITON HAS MET IN OUTPUT\n");
-		return NULL;
+		printf("%c",plus_sign_buf[counter] );
+		counter++;
 	}
+			//if(plus_sign_buf[counter] == NULL){break;}
+	printf("\n");
 
-	for(int i = 0; i < strlen(plus_sign_buf); i++){
+}
 
-	//	if(&plus_sign_buf[i] != NULL){
-		//	printf("HELLO\n");
-		//	printf("%d\n",strlen(plus_sign_buf) );
-			if(counter < ending_char)
-			{
-				output_strings[i] = plus_sign_buf[i];
-			}
-			else{
-				strcat(output_strings,"\n");
-				counter = 0;
-				confirm_output = true;
-			}
-			//printf("counter %d \n",counter);
-			//printf("OUTPUT STRING %s\n",output_strings );
-			if(confirm_output){
-				//printf("OUTPUT STRING %s\n",output_strings );
-			//	printf("bitch\n");
 
-				// for(int k = 0; k < strlen(output_strings); k++){
-				// 	output_buf[index] = output_strings[i];
-				// }
-				output_buf[index] = output_strings;
-				printf("OUTPUT BUF %s\n",output_buf );
-				index++;
-				confirm_output = false;
-			}
-		counter++;	
-		//}
-	}
+
+
+	// if(strcmp("STOP\n",plus_sign_buf) == 0){
+	// 	stop_input = true;
+	// 	printf("STOP PROCESS CONDITON HAS MET IN OUTPUT\n");
+	// 	return NULL;
+	// }
+
 
 
 	return NULL;
@@ -167,13 +166,14 @@ int main(int argc, char const *argv[])
 	
 
 
+
 	input_thread();
 	line_seperator_thread();
 	plus_sign_thread();
 	output_thread();
 	//printf("length of out buf:%d\n",strlen(output_buf) );
 	//printf("%s\n", output_buf);
-	//printf("%s\n",plus_sign_buf );
+	//printf(" \n PLUS SIGN BUF: \n%s\n\n",plus_sign_buf );
 
 	// for(int i = 0; i < strlen(plus_sign_buf); i++){
 	// 	printf("%c", plus_sign_buf[i]);
