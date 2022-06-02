@@ -84,7 +84,6 @@ memset(filtered_msg, '\0', sizeof(filtered_msg));
 
   //remove the trailing \n in filtered_msg
   filtered_msg[strcspn(filtered_msg, "\n")] = '\0';
-    //final_msg[strcspn(final_msg, "\n")] = '\0';
 //printf("%s\n",filtered_msg );
  strcat(filtered_msg, "@@");
 
@@ -106,7 +105,7 @@ memset(filtered_msg, '\0', sizeof(filtered_msg));
       }
       //add the counter for the total number messages sent
       num_bytes_sent += remaining_bytes;
-      printf("number of bytes sent : %d\n", num_bytes_sent);
+     // printf("number of bytes sent : %d\n", num_bytes_sent);
 
     if (remaining_bytes < 0){
       error("CLIENT: ERROR writing to socket");
@@ -200,13 +199,16 @@ if(strlen(key_msg)-1 <  strlen(input_msg)-1){
   printf("Error: '%s' is too short\n", argv[2]);
   exit(EXIT_FAILURE);
 }
+
+//checks for characters
+//argv[1] and argv[2], check for key and plain text
 //verify the characters to be capitalize and spaces
 verify_characters(input_msg, key_msg);
 
 free(input_msg);
 free(key_msg);
 
-//sendfile(text_file, socketFD, sizeof(text_file));
+
 
 
   // Create a socket
@@ -218,15 +220,11 @@ free(key_msg);
    // Set up the server address struct
   int port_number = atoi(argv[3]);
   if(port_number == 0){error("invalid port number");}
-   //printf("test");
   setupAddressStruct(&serverAddress, port_number, "localhost");
 
-//checks for characters
-  //argv[1] and argv[2], check for key and plain text
 
-//printf()
-//fopen 
- printf("tesSDSDFSDt\n");
+
+
   // Connect to server
   if (connect(socketFD, (struct sockaddr*)&serverAddress, sizeof(serverAddress)) < 0){
     error("CLIENT: ERROR connecting");
@@ -241,28 +239,18 @@ char temp[strlen(verify)];
 //sendfile_nonblock(argv[1], socketFD);
 sendfile(argv[1], socketFD, sizeof(text_file));
 
+//need to receive junk message in between sending to prevent blocking
 recv(socketFD,temp, sizeof(temp),0);
 
 
 //sendfile_nonblock(argv[2], socketFD);
 sendfile(argv[2],socketFD, sizeof(keygen_file));
+
+//need to receive junk message in between sending to prevent blocking
 recv(socketFD,temp, sizeof(temp),0);
 
 close(text_file);
 close(keygen_file);
-
-  //charsWritten = send(socketFD, buffer, strlen(buffer), 0); 
-  
-  //error cehck for sending 
-  // if (charsWritten < 0){
-  //   error("CLIENT: ERROR writing to socket");
-  // }
-  // if (charsWritten < strlen(buffer)){
-  //   printf("CLIENT: WARNING: Not all data written to socket!\n");
-  // }
-
-
-
 
 
 
@@ -272,12 +260,12 @@ close(keygen_file);
   // Clear out the buffer again for reuse
   memset(buffer, '\0', sizeof(buffer));
   // Read data from the socket, leaving \0 at end
-  //charsRead = recv(socketFD, buffer, sizeof(buffer) - 1, 0); 
+  charsRead = recv(socketFD, buffer, sizeof(buffer) - 1, 0); 
   if (charsRead < 0){
     error("CLIENT: ERROR reading from socket");
   }
  //printf("CLIENT: I received this from the server: \"%s\"\n", buffer);
-
+printf("%s\n", buffer);
   // Close the socket
   close(socketFD); 
   return 0;

@@ -27,6 +27,9 @@ struct encrpytion_map{
   char letters;
 };
 
+
+//How to check for alphabetic characters
+//https://stackoverflow.com/questions/31010152/function-to-check-for-alphabetic-characters
 void encryption(char *key_msg, char* text_msg){
 
   char encypted_letter;
@@ -59,24 +62,23 @@ void encryption(char *key_msg, char* text_msg){
     }
 
 
+    //add them together to for encrypting 
     encypted_letter = text_msg[index] + key_msg[index];
 
     //mod 26 since the space is accounted for seperatly in the if statement 
+    //this process is to revert back to 'A'
     encypted_letter = encypted_letter % (MAX_ALPHABET);
 
     if(encypted_letter != MAX_ALPHABET){
 
+      //add the ASCII values back to get the correct character
       text_msg[index] = encypted_letter + 65;
     }
     else{
       //add the space if it is not within the alphabet range 
       text_msg[index] = ' ';
     }
-
-
-
     index++;
-
   }
   //trigger the do while loop until it reaches the null terminator
 while(text_msg[index] != '\0'); 
@@ -100,14 +102,14 @@ void readfile_block(int socket_ptr, char* final_msg_buf, size_t buffersize){
  // char * temp;
  // char* terminalLoc;
 
-  memset(buffer, '\0', sizeof(buffer));
-  
+  //memset(buffer, '\0', sizeof(buffer));
+  memset(final_msg_buf, '\0',buffersize);
   //printf("CASE 0\n");
   while (strstr(final_msg_buf, "@@") == NULL){
   //while ( (terminalLoc = strstr(final_msg_buf, "\0")) == NULL){
 
     // Clear the read buffer before reading 
-    memset(final_msg_buf, '\0',buffersize);
+    memset(buffer, '\0', sizeof(buffer));
     
    // printf("TESTSEVER\n");
 
@@ -210,22 +212,9 @@ int main(int argc, char *argv[]){
   listen(listenSocket, 5); 
   
 
-  // spawnpid = fork();
-  // switch (spawnpid){
-  // 	case 0:
-
-  // 		//write()
-  // 	break;
-
-  // 	default:
-
-  // 	break;
-
-  // }
-
   // Accept a connection, blocking if one is not available until one connects
   while(1){
-    printf("wiating fort diuck\n");
+  //  printf("wiating fort diuck\n");
     // Accept the connection request which creates a connection socket
     connectionSocket = accept(listenSocket, 
                 (struct sockaddr *)&clientAddress, 
@@ -234,12 +223,8 @@ int main(int argc, char *argv[]){
       error("ERROR on accept");
     }
     else{
-      printf("CONNECTED\n");
+    //  printf("CONNECTED\n");
     }
-
-    // printf("SERVER: Connected to client running at host %d port %d\n", 
-    //                       ntohs(clientAddress.sin_addr.s_addr),
-    //                       ntohs(clientAddress.sin_port));
 
 /*NOTE!!!  
 * only in the child server process will the actual encryption take place,
@@ -250,10 +235,11 @@ int main(int argc, char *argv[]){
     //once connection is established, initiate the fork process
     int spawnpid = fork();
     int childstatus, bytesRead;
-//switch function here
 
+    //junk sending variables to prevent blocking
     char const *verify = "received";
     char temp[strlen(verify)];
+
 
     switch(spawnpid){
       
@@ -268,34 +254,38 @@ int main(int argc, char *argv[]){
         memset(key_msg, '\0', sizeof(key_msg));
 
         //printf("READfile before read\n");
-        printf("PLAINTEXT msesgae is---------- \n");
+       // printf("PLAINTEXT msesgae is---------- \n");
         readfile_block(connectionSocket,text_msg,sizeof(text_msg)); 
         //readfile_nonblock(connectionSocket, text_msg, sizeof(text_msg));
        // printf("first readfile is done\n");
+
+        // need to send junk mesasge in between reading to prevent blocking 
         send(connectionSocket, verify, strlen(verify),0);
-        printf("plaintext: %s\n", text_msg);
-        printf("length of plaintext: %d \n", strlen(text_msg));
+       // printf("plaintext: %s\n", text_msg);
+       // printf("length of plaintext: %d \n", strlen(text_msg));
 
 
-        printf("KEY msesgae is---------- \n");
+      //  printf("KEY msesgae is---------- \n");
         readfile_block(connectionSocket, key_msg, sizeof(key_msg));
        // readfile_nonblock(connectionSocket, key_msg, sizeof(key_msg));
+
+        // need to send junk mesasge in between reading to prevent blocking 
         send(connectionSocket, verify, strlen(verify),0);
 
     
-        printf("key: %s\n", key_msg);
-        printf("length of key: %d \n", strlen(key_msg));
+        //printf("key: %s\n", key_msg);
+      //  printf("length of key: %d \n", strlen(key_msg));
 
         //testing 
         char temp_text[15] = "HELLO";
         char temp_key[15] = "XMCKL";
 
-        //encryption(key_msg, text_msg);
-        encryption(temp_key, temp_text);
+        encryption(key_msg, text_msg);
 
-        printf("AFTER ENCRYPTION\n");
-        //printf("%s\n", text_msg );
-        printf("%s\n", temp_text );
+        fflush(stdout);
+        //sending the encryption back
+        send(connectionSocket, text_msg, strlen(text_msg),0);
+ 
 
         exit(EXIT_SUCCESS);
         break;
@@ -303,8 +293,9 @@ int main(int argc, char *argv[]){
 
       default:
 
-        spawnpid = waitpid(spawnpid, &childstatus, 0);
-        printf(" PARENT (%d): CHILD (%d) terminated. exiting\n", getpid(),spawnpid);      
+        //wait for child process to finish
+        spawnpid = waitpid(spawnpid, &childstatus, 0); 
+       // printf(" PARENT (%d): CHILD (%d) terminated. exiting\n", getpid(),spawnpid);      
         fflush(stdout);
         
         break;
