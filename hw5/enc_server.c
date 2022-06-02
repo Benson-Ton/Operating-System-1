@@ -22,12 +22,67 @@ void error(const char *msg) {
   exit(1);
 } 
 
+struct encrpytion_map{
+  int values;
+  char letters;
+};
 
 void encryption(char *key_msg, char* text_msg){
 
+  char encypted_letter;
+  int index = 0;
+
+//note the message is comming in with no newline and with a null terminator 
+
+  do{
+
+    if(text_msg[index] == ' '){
+
+      //replace with value of 26 since A-Z plus space so 26 is space
+      text_msg[index] = MAX_ALPHABET; 
+    }
+    else{
+
+      //need to subtract the ASCII value from the beginning which is A
+      text_msg[index] = text_msg[index] - 65;
+    }
+
+   if(key_msg[index] == ' '){
+
+      //replace with value of 26 since A-Z plus space so 26 is space
+      key_msg[index] = MAX_ALPHABET;
+    }
+    else{
+      
+       //need to subtract the ASCII value from the beginning which is A
+      key_msg[index] = key_msg[index] - 65;
+    }
+
+
+    encypted_letter = text_msg[index] + key_msg[index];
+
+    //mod 26 since the space is accounted for seperatly in the if statement 
+    encypted_letter = encypted_letter % (MAX_ALPHABET);
+
+    if(encypted_letter != MAX_ALPHABET){
+
+      text_msg[index] = encypted_letter + 65;
+    }
+    else{
+      //add the space if it is not within the alphabet range 
+      text_msg[index] = ' ';
+    }
 
 
 
+    index++;
+
+  }
+  //trigger the do while loop until it reaches the null terminator
+while(text_msg[index] != '\0'); 
+
+//re-add to the end of the message
+text_msg[index] = '\0';
 
 }
 
@@ -78,7 +133,7 @@ void readfile_block(int socket_ptr, char* final_msg_buf, size_t buffersize){
     // Add the chunk we read to what we have read up to now
     strcat(final_msg_buf, buffer); 
    // printf("Reader: Chunk received: \"%s\" \n", buffer);
-   // printf("Reader: Total received till now: \"%s\"\n", final_msg_buf);
+  // printf("Reader: Total received till now: \"%s\"\n", final_msg_buf);
   
 
     num_bytes_sent += bytesRead;
@@ -209,6 +264,8 @@ int main(int argc, char *argv[]){
 
       case 0:
         //read and encrypt message
+        memset(text_msg, '\0', sizeof(text_msg));
+        memset(key_msg, '\0', sizeof(key_msg));
 
         //printf("READfile before read\n");
         printf("PLAINTEXT msesgae is---------- \n");
@@ -217,6 +274,7 @@ int main(int argc, char *argv[]){
        // printf("first readfile is done\n");
         send(connectionSocket, verify, strlen(verify),0);
         printf("plaintext: %s\n", text_msg);
+        printf("length of plaintext: %d \n", strlen(text_msg));
 
 
         printf("KEY msesgae is---------- \n");
@@ -226,6 +284,19 @@ int main(int argc, char *argv[]){
 
     
         printf("key: %s\n", key_msg);
+        printf("length of key: %d \n", strlen(key_msg));
+
+        //testing 
+        char temp_text[15] = "HELLO";
+        char temp_key[15] = "XMCKL";
+
+        //encryption(key_msg, text_msg);
+        encryption(temp_key, temp_text);
+
+        printf("AFTER ENCRYPTION\n");
+        //printf("%s\n", text_msg );
+        printf("%s\n", temp_text );
+
         exit(EXIT_SUCCESS);
         break;
 

@@ -106,7 +106,7 @@ memset(filtered_msg, '\0', sizeof(filtered_msg));
       }
       //add the counter for the total number messages sent
       num_bytes_sent += remaining_bytes;
-     // printf("number of bytes sent : %d\n", num_bytes_sent);
+      printf("number of bytes sent : %d\n", num_bytes_sent);
 
     if (remaining_bytes < 0){
       error("CLIENT: ERROR writing to socket");
@@ -193,6 +193,13 @@ char * input_msg = (char *) calloc(100000,sizeof(char));
 char * key_msg = (char *) calloc(100000,sizeof(char));
 read(text_file, input_msg, sizeof(buffer));
 read(keygen_file, key_msg, sizeof(buffer));
+
+//printf("length of key %d\n", strlen(key_msg) );
+//printf("length of key12312:  %d\n", strlen(key_msg)-1 );
+if(strlen(key_msg)-1 <  strlen(input_msg)-1){
+  printf("Error: '%s' is too short\n", argv[2]);
+  exit(EXIT_FAILURE);
+}
 //verify the characters to be capitalize and spaces
 verify_characters(input_msg, key_msg);
 
